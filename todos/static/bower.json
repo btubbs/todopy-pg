@@ -1,0 +1,21 @@
+{
+  "name": "static",
+  "version": "0.0.0",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "react": "~0.12.2",
+    "reconnectingWebsocket": "https://github.com/joewalnes/reconnecting-websocket.git#1.0.0",
+    "todomvc-app-css": "~2.0.1",
+    "todomvc-common": "~1.0.1",
+    "director": "~1.2.8",
+    "superagent": "~0.21.0"
+  }
+}

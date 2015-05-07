@@ -1,0 +1,7 @@
+syntax: glob
+*.pyc
+*.swp
+*.swo
+.DS_Store
+*egg-info*
+todos/static/bower/*
