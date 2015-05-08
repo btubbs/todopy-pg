@@ -5,3 +5,6 @@ syntax: glob
 .DS_Store
 *egg-info*
 todos/static/bower/*
+todos/static/js/compiled.js
+todos/static/jsx/*js
+.git/*

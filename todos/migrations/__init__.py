@@ -58,8 +58,8 @@ def run(settings):
         cur.execute(sql)
 
 
-def run_and_sleep():
-    run()
+def run_and_sleep(settings):
+    run(settings)
     logger.info('Sleeping')
     sys.stdin.read()
 
