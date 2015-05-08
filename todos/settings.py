@@ -45,7 +45,7 @@ DEFAULTS = {
         ('beaker.middleware.SessionMiddleware', {
             'session.type': 'cookie',
             'session.cookie_expires': True,
-            'session.key': 'mettle_session',
+            'session.key': 'session', # Name of the cookie we'll set.
             'session.validate_key': random_secret(),
             'session.auto': True,
             # allow running locally without https

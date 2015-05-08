@@ -23,7 +23,7 @@ JS_FILES = [
 TMPL = """
 <html>
   <head>
-    <title>Mettle</title>
+    <title>Realtime Python+Postgres TodoMVC</title>
 
     <!--style-->
     {css_files}
@@ -74,4 +74,4 @@ else:
 
 class Index(View):
     def get(self):
-        return Response(HOME, content_type='text/html')
+        return Response(HOME, content_type='text/html; charset=utf-8')
