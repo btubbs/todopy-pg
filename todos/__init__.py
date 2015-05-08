@@ -15,7 +15,7 @@ from todos.views import index, api
 routes = [
     ('/', 'index', index.Index),
     ('/api/todos/', 'todo_list', api.TodoList),
-    ('/api/todos/<int:todo_id>/', 'todo_detail', api.TodoDetail),
+    ('/api/todos/<todo_id>/', 'todo_detail', api.TodoDetail),
 ]
 
 

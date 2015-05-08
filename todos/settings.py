@@ -25,7 +25,7 @@ def random_secret(n=64):
 
 
 DEFAULTS = {
-    'db_url': 'postgresql://postgres@/todo',
+    'db_url': 'postgresql://postgres@/todos',
     'web_worker_timeout': 30,
     'websocket_ping_interval': 5,
 

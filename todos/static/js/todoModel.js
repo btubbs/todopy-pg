@@ -4,8 +4,43 @@
 /*jshint newcap:false */
 var app = app || {};
 
+// polyfill Array.findIndex
+if (!Array.prototype.findIndex) {
+  Array.prototype.findIndex = function(predicate) {
+    if (this == null) {
+      throw new TypeError('Array.prototype.findIndex called on null or undefined');
+    }
+    if (typeof predicate !== 'function') {
+      throw new TypeError('predicate must be a function');
+    }
+    var list = Object(this);
+    var length = list.length >>> 0;
+    var thisArg = arguments[1];
+    var value;
+
+    for (var i = 0; i < length; i++) {
+      value = list[i];
+      if (predicate.call(thisArg, value, i, list)) {
+        return i;
+      }
+    }
+    return -1;
+  };
+}
+
 (function () {
-	'use strict';
+	//'use strict';
+
+  var WSPREFIX = function() {
+    var loc = window.location, newUri;
+    if (loc.protocol === "https:") {
+        newUri = "wss:";
+    } else {
+        newUri = "ws:";
+    }
+    newUri += "//" + loc.host;
+    return newUri;
+  }();
 
 	var Utils = app.Utils;
 	// Generic "model" object. You can use whatever
@@ -15,9 +50,32 @@ var app = app || {};
 	// separate out parts of your application.
 	app.TodoModel = function (key) {
 		this.key = key;
-		this.todos = Utils.store(key);
+    this.todos = [];
 		this.onChanges = [];
+
+    this.ws = new ReconnectingWebSocket(WSPREFIX + '/api/todos/');
+    this.ws.onmessage = app.TodoModel.prototype.onmessage.bind(this);
 	};
+
+  app.TodoModel.prototype.onmessage = function (ev) {
+    // if todo is already in this.todos, then replace it
+    // if not in, then add it.
+    var todo = JSON.parse(ev.data);
+    if (todo._op==='DELETE') {
+      this.todos = this.todos.filter(function(t) {return t.id!==todo.id;});
+    } else {
+      var idx = this.todos.findIndex(function(t) {
+        return t.id===todo.id;
+      });
+
+      if (idx==-1) {
+        this.todos.push(todo);
+      } else {
+        this.todos[idx] = todo;
+      }
+    }
+    this.inform();
+  };
 
 	app.TodoModel.prototype.subscribe = function (onChange) {
 		this.onChanges.push(onChange);
@@ -29,13 +87,7 @@ var app = app || {};
 	};
 
 	app.TodoModel.prototype.addTodo = function (title) {
-		this.todos = this.todos.concat({
-			id: Utils.uuid(),
-			title: title,
-			completed: false
-		});
-
-		this.inform();
+    superagent.post('/api/todos/').send({"title": title}).end();
 	};
 
 	app.TodoModel.prototype.toggleAll = function (checked) {
@@ -51,37 +103,25 @@ var app = app || {};
 	};
 
 	app.TodoModel.prototype.toggle = function (todoToToggle) {
-		this.todos = this.todos.map(function (todo) {
-			return todo !== todoToToggle ?
-				todo :
-				Utils.extend({}, todo, {completed: !todo.completed});
-		});
-
-		this.inform();
+    todoToToggle.completed = !todoToToggle.completed;
+    superagent.put('/api/todos/' + todoToToggle.id + '/').send(todoToToggle).end();
 	};
 
 	app.TodoModel.prototype.destroy = function (todo) {
-		this.todos = this.todos.filter(function (candidate) {
-			return candidate !== todo;
-		});
-
-		this.inform();
+    superagent.del('/api/todos/' + todo.id + '/').end();
 	};
 
 	app.TodoModel.prototype.save = function (todoToSave, text) {
-		this.todos = this.todos.map(function (todo) {
-			return todo !== todoToSave ? todo : Utils.extend({}, todo, {title: text});
-		});
-
-		this.inform();
+    todoToSave.title = text;
+    superagent.put('/api/todos/' + todoToSave.id + '/').send(todoToSave).end();
 	};
 
 	app.TodoModel.prototype.clearCompleted = function () {
-		this.todos = this.todos.filter(function (todo) {
-			return !todo.completed;
-		});
-
-		this.inform();
+		this.todos.map(function (todo) {
+      if (todo.completed) {
+        app.TodoModel.prototype.destroy(todo);
+      }
+    });
 	};
 
 })();

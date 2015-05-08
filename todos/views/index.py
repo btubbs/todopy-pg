@@ -29,7 +29,7 @@ TMPL = """
     {css_files}
   </head>
   <body>
-    <section id="todoapp"></section>
+    <section id="todoapp" class="todoapp"></section>
     <footer id="info">
             <p>Double-click to edit a todo</p>
             <p>Created by <a href="http://github.com/petehunt/">petehunt</a></p>

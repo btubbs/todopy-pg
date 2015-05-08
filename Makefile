@@ -10,8 +10,8 @@ JSX_MODULES=todoItem footer app
 JSX_TARGETS=$(foreach module,$(JSX_MODULES),$(JSX_DIR)/$(module).js)
 
 db:
-	-psql -U postgres -c "drop database todo"
-	psql -U postgres -c "create database todo"
+	-psql -U postgres -c "drop database todos"
+	psql -U postgres -c "create database todos"
 
 clean_files:
 	-rm -rf $(STATIC_DIR)/jsx/.module-cache
