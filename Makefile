@@ -25,7 +25,7 @@ clean: db clean_files
 # By letting 'nodeenv' install node.js, it will be placed into the Python virtualenv.
 $(BIN)/npm:
 	pip install nodeenv
-	nodeenv -p --prebuilt
+	nodeenv --prebuilt -p
 
 $(BIN)/jsx: $(BIN)/npm
 	npm install -g react-tools
