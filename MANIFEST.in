@@ -1,0 +1,2 @@
+recursive-include todos/static/ *
+recursive-include todos/migrations/ *
