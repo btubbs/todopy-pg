@@ -4,7 +4,7 @@ import setuptools
 
 setup_params = dict(
     name='todos',
-    version='0.0.1',
+    version='0.0.3',
     author='Brent Tubbs',
     author_email='brent.tubbs@gmail.com',
     packages=setuptools.find_packages(),

@@ -26,7 +26,7 @@ def random_secret(n=64):
 
 DEFAULTS = {
     # use Heroku Postgres if present.
-    'db_url': os.getenv('HEROKU_POSTGRESQL_AMBER_URL',
+    'db_url': os.getenv('DATABASE_URL',
                         'postgresql://postgres@/todos'),
     'web_worker_timeout': 30,
     'websocket_ping_interval': 5,
